@@ -2,9 +2,9 @@ import { Component } from 'react';
 
 export class App extends Component {
   state = {
-    good: 1,
-    neutral: 2,
-    bad: 3,
+    good: 0,
+    neutral: 0,
+    bad: 0,
   };
 
   countTotalFeedback = () => {
@@ -14,7 +14,9 @@ export class App extends Component {
   };
 
   countPositiveFeedbackPercentage = () => {
-    console.log(1);
+    const { good, neutral, bad } = this.state;
+    const positive = Math.round((good / (good + neutral + bad)) * 100);
+    return positive > 0 ? positive : 0;
   };
 
   render() {
@@ -32,7 +34,7 @@ export class App extends Component {
           <p>Neutral: {this.state.neutral}</p>
           <p>Bad: {this.state.bad}</p>
           <p>Total: {this.countTotalFeedback()}</p>
-          <p>Positive feedback: </p>
+          <p>Positive feedback: {this.countPositiveFeedbackPercentage()}</p>
         </div>
       </div>
     );
