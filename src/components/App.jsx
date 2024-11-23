@@ -6,9 +6,13 @@ import { Notification } from './Notification/Notification';
 
 export class App extends Component {
   state = {
-    good: 1,
-    neutral: 2,
-    bad: 3,
+    good: 0,
+    neutral: 0,
+    bad: 0,
+  };
+
+  onLeaveFeedback = () => {
+    this.setState(prevState => prevState + 1);
   };
 
   countTotalFeedback = () => {
@@ -27,7 +31,7 @@ export class App extends Component {
     return (
       <div>
         <Section title="Please leave feedback">
-          <FeedbackOptions options={1} onLeaveFeedback={1} />
+          <FeedbackOptions options={1} onLeaveFeedback={this.onLeaveFeedback} />
         </Section>
 
         <Section title="Statistics">
@@ -35,8 +39,8 @@ export class App extends Component {
             good={this.state.good}
             neutral={this.state.neutral}
             bad={this.state.bad}
-            total={this.countTotalFeedback()}
-            positivePercentage={this.countPositiveFeedbackPercentage()}
+            total={this.countTotalFeedback}
+            positivePercentage={this.countPositiveFeedbackPercentage}
           />
           <Notification message="There is no feedback" />
         </Section>
