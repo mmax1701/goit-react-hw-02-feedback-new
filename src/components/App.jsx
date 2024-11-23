@@ -11,38 +11,49 @@ export class App extends Component {
     bad: 0,
   };
 
-  onLeaveFeedback = () => {
-    this.setState(prevState => prevState + 1);
+  onLeaveFeedback = option => {
+    this.setState(prevState => ({
+      [option]: prevState[option] + 1,
+    }));
   };
 
   countTotalFeedback = () => {
     const { good, neutral, bad } = this.state;
-    const total = good + neutral + bad;
-    return total;
+    return good + neutral + bad;
   };
 
   countPositiveFeedbackPercentage = () => {
-    const { good, neutral, bad } = this.state;
-    const positive = Math.round((good / (good + neutral + bad)) * 100);
-    return positive > 0 ? positive : 0;
+    const { good } = this.state;
+    const total = this.countTotalFeedback();
+    const positive = Math.round((good / total) * 100);
+    return total > 0 ? positive : 0;
   };
 
   render() {
+    const total = this.countTotalFeedback();
+    const percentage = this.countPositiveFeedbackPercentage();
+
     return (
       <div>
         <Section title="Please leave feedback">
-          <FeedbackOptions options={1} onLeaveFeedback={this.onLeaveFeedback} />
+          <FeedbackOptions
+            options={['good', 'neutral', 'bad']}
+            onLeaveFeedback={this.onLeaveFeedback}
+          />
         </Section>
 
         <Section title="Statistics">
-          <Statistics
-            good={this.state.good}
-            neutral={this.state.neutral}
-            bad={this.state.bad}
-            total={this.countTotalFeedback}
-            positivePercentage={this.countPositiveFeedbackPercentage}
-          />
-          <Notification message="There is no feedback" />
+          {total > 0 ? (
+            <Statistics
+              good={this.state.good}
+              neutral={this.state.neutral}
+              bad={this.state.bad}
+              total={total}
+              percentage={percentage}
+            />
+          ) : (
+            <Notification message="There is no feedback" />
+          )}
         </Section>
       </div>
     );
